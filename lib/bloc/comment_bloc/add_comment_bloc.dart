@@ -8,7 +8,7 @@ import 'package:pokapp/model/post.dart';
 import 'package:pokapp/repository/comment_repository.dart';
 import 'package:pokapp/repository/post_repository.dart';
 
-class PostBloc implements BlocBase<Comment>{
+class AddCommentBloc implements BlocBase<Comment>{
   CommentRepository _commentRepository;
   StreamController _streamController;
 

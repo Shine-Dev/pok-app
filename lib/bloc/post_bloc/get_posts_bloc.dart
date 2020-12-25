@@ -6,7 +6,7 @@ import 'package:pokapp/bloc/bloc_event.dart';
 import 'package:pokapp/model/post.dart';
 import 'package:pokapp/repository/post_repository.dart';
 
-class PostBloc implements BlocBase<List<Post>>{
+class GetPostsBloc implements BlocBase<List<Post>>{
   PostRepository _postRepository;
   StreamController _streamController;
 
