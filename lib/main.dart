@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Pok',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -42,8 +42,7 @@ class AuthWrapper extends StatelessWidget {
             return StreamBuilder<User>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                User user = FirebaseAuth.instance.currentUser;
-                return user == null ? AuthPage() : MainPage();
+                return snapshot.data == null ? AuthPage() : MainPage();
               },
             );
           }

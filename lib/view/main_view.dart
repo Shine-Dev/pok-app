@@ -1,131 +1,94 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:pokapp/model/comment.dart';
+import 'package:pokapp/model/post.dart';
+import 'package:pokapp/network/network_exception.dart';
+import 'package:pokapp/repository/comment_repository.dart';
+import 'package:pokapp/repository/post_repository.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _counter = 0;
+  int _selectedIndex = 0;
 
-  /*void _signIn() {
+  List<Widget> _widgetOptions;
+
+  _MainPageState() {
+    _widgetOptions = <Widget>[
+      RaisedButton(
+        child: Text('Test'),
+        onPressed: _test,
+      ),
+      Card(
+        color: Colors.deepPurpleAccent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextField(),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  void _onItemTapped(int index) {
     setState(() {
-      googleSignIn().then((value) => print);
+      _selectedIndex = index;
     });
-  }*/
+  }
 
-  void _signIn() {
+  void _test() async {
+    print("ok");
+    try {
+      PostRepository postRepository = PostRepository();
 
+      List<Post> posts1 = await postRepository
+          .getPosts(PostLocation(latitude: 12, longitude: 12));
+      CommentRepository commentRepository = CommentRepository();
+      PostContent postContent = PostContent(
+        title: "test",
+        content: "test2",
+        postLocation: PostLocation(
+          latitude: 12,
+          longitude: 11.9999999,
+        ),
+      );
+
+      Post post = await postRepository.addPost(postContent);
+      print(post.postContent.title);
+      List<Post> posts = await postRepository
+          .getPosts(PostLocation(latitude: 12, longitude: 12));
+      posts.forEach((element) {
+        //print(element.id);
+      });
+      Comment c = await commentRepository
+          .addComment(CommentContent(postId: post.id, content: "cool"));
+      print(c.id);
+
+      List<Comment> comments = await commentRepository.getComments(c.id);
+      comments.forEach((element) {
+        print(element.commentContent.postId);
+      });
+    } on FetchException catch (e) {
+      print(e.message);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       backgroundColor: Color.fromRGBO(47, 45, 48, 1),
       appBar: AppBar(
-        // Here we take the value from the MainPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Image.asset('assets/images/logo.png',width: 70, height: 35),
+        title: Image.asset('assets/images/logo.png', width: 70, height: 35),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Card(
-              color: Colors.deepPurpleAccent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.note, size: 50),
-                    title: Text('Heart Shaker',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text('TWICE',
-                        style: TextStyle(color: Colors.white70)),
-                  ),
-                ],
-              ),
-            ),
-            Card(
-              color: Colors.deepPurpleAccent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.note, size: 50),
-                    title: Text('Heart Shaker',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text('TWICE',
-                        style: TextStyle(color: Colors.white70)),
-                  ),
-                ],
-              ),
-            ),
-            Card(
-              color: Colors.deepPurpleAccent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.note, size: 50),
-                    title: Text('Heart Shaker',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text('TWICTWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICETWICEE',
-                        style: TextStyle(color: Colors.white70)),
-                  ),
-                ],
-              ),
-            ),
-            Card(
-              color: Colors.deepPurpleAccent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.note, size: 50),
-                    title: Text('Heart Shaker',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text('TWICE',
-                        style: TextStyle(color: Colors.white70)),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.deepPurpleAccent,
@@ -140,6 +103,8 @@ class _MainPageState extends State<MainPage> {
             label: 'Write post',
           )
         ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
