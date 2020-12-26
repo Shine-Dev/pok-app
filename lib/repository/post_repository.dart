@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:pokapp/model/post.dart';
 import 'package:pokapp/network/api_provider.dart';
 
@@ -5,7 +6,7 @@ class PostRepository {
 
   final ApiProvider apiProvider = ApiProvider();
 
-  Future<List<Post>> getPosts(PostLocation location) async {
+  Future<List<Post>> getPosts(Position location) async {
     var response = await apiProvider
         .get("posts?latitude=${location.latitude}"
         "&longitude=${location.longitude}");

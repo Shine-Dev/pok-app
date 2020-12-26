@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokapp/auth/auth_service.dart';
+import 'package:pokapp/auth/auth_provider.dart';
 
 class AuthPage extends StatefulWidget {
   AuthPage({Key key}) : super(key: key);
@@ -20,8 +20,10 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
 
+  AuthProvider _authProvider = AuthProvider();
+
   void _signIn() {
-    authService.googleSignIn();
+    _authProvider.googleSignIn();
   }
 
   @override

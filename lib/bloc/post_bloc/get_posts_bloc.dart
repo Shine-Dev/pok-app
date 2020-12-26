@@ -1,41 +1,34 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:pokapp/bloc/bloc_base.dart';
 import 'package:pokapp/bloc/bloc_event.dart';
+import 'package:pokapp/bloc/post_bloc/geolocation/geolocation_exception.dart';
+import 'package:pokapp/bloc/post_bloc/geolocation/geolocation_provider.dart';
 import 'package:pokapp/model/post.dart';
+import 'package:pokapp/network/network_exception.dart';
 import 'package:pokapp/repository/post_repository.dart';
 
-class GetPostsBloc implements BlocBase<List<Post>>{
-  PostRepository _postRepository;
-  StreamController _streamController;
+class GetPostsBloc extends BlocBase<List<Post>> {
+  PostRepository _postRepository = PostRepository();
+  GeolocationProvider _geolocationProvider = GeolocationProvider();
 
-  StreamSink<BlocEvent<List<Post>>> get _sink => _streamController.sink;
-
-  @override
-  Stream<BlocEvent<List<Post>>> get stream => _streamController.stream;
-
-  PostBloc() {
-    _postRepository = PostRepository();
-    _streamController = StreamController<BlocEvent<List<Post>>>();
-  }
-
-  getPosts(PostLocation location) async {
-    _sink.add(BlocEvent.loading("Getting posts..."));
+  getPosts() async {
+    safeEventAdd(BlocEvent.loading("Getting posts..."));
     try {
+      Position location = await _geolocationProvider.determinePosition();
       List<Post> posts = await _postRepository.getPosts(location);
-      if(!_streamController.isClosed) {
-        _sink.add(BlocEvent.completed(posts));
-      }
-    } catch(e) {
-      if(!_streamController.isClosed) {
-        _sink.add(BlocEvent.error(e.toString()));
-      }
+      safeEventAdd(BlocEvent.completed(posts));
     }
-  }
-
-  @override
-  dispose() {
-    _streamController.close();
+    on GeolocationException catch(e) {
+      safeEventAdd(BlocEvent.error(e.message));
+    }
+    catch(e) {
+      log(e.message);
+      safeEventAdd(BlocEvent.error("Error occured while "
+          "contacting the server."));
+    }
   }
 }

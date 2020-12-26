@@ -6,6 +6,7 @@ import 'package:pokapp/model/post.dart';
 import 'package:pokapp/network/network_exception.dart';
 import 'package:pokapp/repository/comment_repository.dart';
 import 'package:pokapp/repository/post_repository.dart';
+import 'package:pokapp/view/main_view/add_post_view.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -19,65 +20,23 @@ class _MainPageState extends State<MainPage> {
 
   List<Widget> _widgetOptions;
 
+
+
   _MainPageState() {
     _widgetOptions = <Widget>[
       RaisedButton(
         child: Text('Test'),
-        onPressed: _test,
       ),
-      Card(
-        color: Colors.deepPurpleAccent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextField(),
-          ],
-        ),
-      ),
+      AddPostPage(),
     ];
   }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      if(mounted) {
+        _selectedIndex = index;
+      }
     });
-  }
-
-  void _test() async {
-    print("ok");
-    try {
-      PostRepository postRepository = PostRepository();
-
-      List<Post> posts1 = await postRepository
-          .getPosts(PostLocation(latitude: 12, longitude: 12));
-      CommentRepository commentRepository = CommentRepository();
-      PostContent postContent = PostContent(
-        title: "test",
-        content: "test2",
-        postLocation: PostLocation(
-          latitude: 12,
-          longitude: 11.9999999,
-        ),
-      );
-
-      Post post = await postRepository.addPost(postContent);
-      print(post.postContent.title);
-      List<Post> posts = await postRepository
-          .getPosts(PostLocation(latitude: 12, longitude: 12));
-      posts.forEach((element) {
-        //print(element.id);
-      });
-      Comment c = await commentRepository
-          .addComment(CommentContent(postId: post.id, content: "cool"));
-      print(c.id);
-
-      List<Comment> comments = await commentRepository.getComments(c.id);
-      comments.forEach((element) {
-        print(element.commentContent.postId);
-      });
-    } on FetchException catch (e) {
-      print(e.message);
-    }
   }
 
   @override

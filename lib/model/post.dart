@@ -1,17 +1,9 @@
-class PostLocation {
-  final double latitude;
-  final double longitude;
-
-  PostLocation({
-    this.latitude,
-    this.longitude
-  });
-}
+import 'package:geolocator/geolocator.dart';
 
 class PostContent {
   final String title;
   final String content;
-  final PostLocation postLocation;
+  final Position postLocation;
 
   PostContent({
     this.title,
@@ -20,7 +12,7 @@ class PostContent {
   });
 }
 
-class Post extends PostContent{
+class Post {
   final String id;
   final DateTime createdAt;
   final PostContent postContent;
@@ -33,7 +25,7 @@ class Post extends PostContent{
       postContent: PostContent(
         title: json["title"],
         content: json["content"],
-        postLocation: PostLocation(
+        postLocation: Position(
           latitude: json["latitude"],
           longitude: json["longitude"],
         ),

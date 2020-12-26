@@ -1,41 +1,36 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
-import 'package:http/http.dart';
 import 'package:pokapp/bloc/bloc_base.dart';
 import 'package:pokapp/bloc/bloc_event.dart';
+import 'package:pokapp/bloc/post_bloc/geolocation/geolocation_exception.dart';
+import 'package:pokapp/bloc/post_bloc/geolocation/geolocation_provider.dart';
 import 'package:pokapp/model/post.dart';
+import 'package:pokapp/network/network_exception.dart';
 import 'package:pokapp/repository/post_repository.dart';
 
-class AddPostBloc implements BlocBase<Post>{
-  PostRepository _postRepository;
-  StreamController _streamController;
+class AddPostBloc extends BlocBase<Post> {
+  PostRepository _postRepository = PostRepository();
+  GeolocationProvider _geolocationProvider = GeolocationProvider();
 
-  StreamSink<BlocEvent<Post>> get _sink => _streamController.sink;
-
-  @override
-  Stream<BlocEvent<Post>> get stream => _streamController.stream;
-
-  PostBloc() {
-    _postRepository = PostRepository();
-    _streamController = StreamController<BlocEvent<Post>>();
-  }
-
-  addPost(PostContent postContent) async {
-    _sink.add(BlocEvent.loading("Adding new Post..."));
+  addPost(String title, String content) async {
+    safeEventAdd(BlocEvent.loading("Adding new Post..."));
     try {
-      Post post = await _postRepository.addPost(postContent);
-      if(!_streamController.isClosed) {
-        _sink.add(BlocEvent.completed(post));
-      }
-    } catch(e) {
-      if(!_streamController.isClosed) {
-        _sink.add(BlocEvent.error(e.toString()));
-      }
+      Post post = await _postRepository.addPost(PostContent(
+        title: title,
+        content: content,
+        postLocation: await _geolocationProvider.determinePosition(),
+      ));
+      safeEventAdd(BlocEvent.completed(post));
     }
-  }
-
-  @override
-  dispose() {
-    _streamController.close();
+    on GeolocationException catch(e) {
+      safeEventAdd(BlocEvent.error(e.message));
+    }
+    catch(e) {
+      log(e.message);
+      safeEventAdd(BlocEvent.error("Error occured while "
+          "contacting the server."));
+    }
   }
 }

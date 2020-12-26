@@ -27,6 +27,7 @@ dependencies:
   firebase_auth: "^0.18.4"
   google_sign_in: "4.5.6"
   http: "^0.12.2"
+  geolocator: "6.1.13"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -66,8 +67,8 @@ flutter:
   # example:
   # fonts:
   #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

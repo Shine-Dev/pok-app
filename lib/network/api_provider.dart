@@ -18,9 +18,9 @@ class ApiProvider {
   }
 
   Future<Map<String,String>> _getPostHeader() async {
-    Map<String, String> authHeader = await _getAuthHeader();
-    authHeader.addAll({'Content-type': 'application/json'});
-    return authHeader;
+    Map<String, String> header = await _getAuthHeader();
+    header.addAll({'Content-type': 'application/json'});
+    return header;
   }
 
   Future<dynamic> get(String url) async {
