@@ -40,9 +40,9 @@ class _AddPostPage extends State<AddPostPage> {
     super.initState();
   }
 
-  _showSnackBar(SnackBar snackbar) {
+  _showSnackBar(SnackBar snackBar) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   _success() {
@@ -86,8 +86,6 @@ class _AddPostPage extends State<AddPostPage> {
   _error(String message) {
     setState(() {
       _buttonDisabled = false;
-      _titleController.text = "";
-      _contentController.text = "";
     });
     _showSnackBar(SnackBar(
       backgroundColor: Colors.redAccent,
@@ -103,7 +101,7 @@ class _AddPostPage extends State<AddPostPage> {
     ));
   }
 
-  String _textfieldValidate(value) {
+  String _textFieldValidate(value) {
     if (value.isEmpty) {
       return '';
     }
@@ -139,15 +137,15 @@ class _AddPostPage extends State<AddPostPage> {
           ),
           Center(
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.53,
+              height: 355,
               width: MediaQuery.of(context).size.width * 0.95,
               child: Card(
-                color: Colors.deepPurpleAccent,
+                color: Color.fromRGBO(133, 92, 209, 1),
                 child: Form(
                   key: _formKey,
                   child: Column(children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 24, 8, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.85,
                         child: TextFormField(
@@ -161,7 +159,7 @@ class _AddPostPage extends State<AddPostPage> {
                                 color: Colors.white54,
                                 fontStyle: FontStyle.italic),
                           ),
-                          validator: _textfieldValidate,
+                          validator: _textFieldValidate,
                         ),
                       ),
                     ),
@@ -172,6 +170,7 @@ class _AddPostPage extends State<AddPostPage> {
                         child: TextFormField(
                           controller: _contentController,
                           style: TextStyle(color: Colors.white70),
+                          maxLines: 7,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(width: 80)),
@@ -180,18 +179,20 @@ class _AddPostPage extends State<AddPostPage> {
                                 color: Colors.white54,
                                 fontStyle: FontStyle.italic),
                           ),
-                          maxLines: 7,
-                          minLines: 7,
-                          validator: _textfieldValidate,
+                          validator: _textFieldValidate,
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.07,
+                        height: 50,
                         width: MediaQuery.of(context).size.width * 0.85,
                         child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.deepPurple),
+                          ),
                           onPressed: _buttonDisabled ? null : _submit,
                           child: Text('Create Post'),
                         ),

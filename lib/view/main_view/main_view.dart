@@ -1,12 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:pokapp/model/comment.dart';
-import 'package:pokapp/model/post.dart';
-import 'package:pokapp/network/network_exception.dart';
-import 'package:pokapp/repository/comment_repository.dart';
-import 'package:pokapp/repository/post_repository.dart';
 import 'package:pokapp/view/main_view/add_post_view.dart';
+import 'get_posts/get_posts_view.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -17,19 +11,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-
-  List<Widget> _widgetOptions;
-
-
-
-  _MainPageState() {
-    _widgetOptions = <Widget>[
-      RaisedButton(
-        child: Text('Test'),
-      ),
-      AddPostPage(),
-    ];
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,11 +27,15 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Image.asset('assets/images/logo.png', width: 70, height: 35),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        children: [
+          Center(child: GetPostsPage()),
+          Center(child: AddPostPage()),
+        ],
+        index: _selectedIndex,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.deepPurple,
         selectedItemColor: Colors.white70,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

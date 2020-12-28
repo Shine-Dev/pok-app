@@ -5,7 +5,8 @@ import 'package:pokapp/bloc/bloc_event.dart';
 
 abstract class BlocBase<T> {
   StreamController _streamController = new StreamController<BlocEvent<T>>();
-  Stream<BlocEvent<T>> get stream => _streamController.stream;
+  Stream<BlocEvent<T>> get stream =>
+        _streamController.stream.asBroadcastStream();
   StreamSink<BlocEvent<T>> get _sink => _streamController.sink;
 
   @protected
