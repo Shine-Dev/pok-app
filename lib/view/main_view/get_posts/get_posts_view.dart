@@ -64,6 +64,15 @@ class _GetPostsPage extends State<GetPostsPage> {
     );
   }
 
+  String _getMessage() {
+    if(_lastEvent == null)
+      return "Pull down to search posts in the area";
+    else if(_lastEvent.status == Status.COMPLETED)
+      return "No posts in the area.";
+    else
+      return _lastEvent.message;
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -76,11 +85,7 @@ class _GetPostsPage extends State<GetPostsPage> {
           return PostWidget(post: _posts[_posts.length - index - 1]);
         },
       ) : ListView(
-        children: [ _listCenterText(_lastEvent != null
-            ? _lastEvent.message
-            : "Pull down to search posts in the area"
-        ),
-        ]
+        children: [ _listCenterText(_getMessage()), ]
       ),
     );
   }
