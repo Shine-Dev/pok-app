@@ -12,12 +12,16 @@ class AddPostPage extends StatefulWidget {
   _AddPostPage createState() => _AddPostPage();
 }
 
-class _AddPostPage extends State<AddPostPage> {
+class _AddPostPage extends State<AddPostPage>
+    with AutomaticKeepAliveClientMixin
+{
+
   final TextEditingController _titleController = new TextEditingController();
   final TextEditingController _contentController = new TextEditingController();
   bool _buttonDisabled = false;
 
   final AddPostBloc addPostBloc = AddPostBloc();
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pokapp/model/post.dart';
 import 'package:pokapp/view/main_view/get_posts/get_comments/get_comments_view.dart';
 
@@ -18,6 +19,7 @@ class _PostWidget extends State<PostWidget> {
   _PostWidget({this.post});
 
   void _onExpansionChange(bool expansion) {
+    primaryFocus.unfocus();
     setState(() {
       this._expanded = expansion;
     });

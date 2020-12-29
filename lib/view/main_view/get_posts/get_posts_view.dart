@@ -12,10 +12,14 @@ class GetPostsPage extends StatefulWidget {
   _GetPostsPage createState() => _GetPostsPage();
 }
 
-class _GetPostsPage extends State<GetPostsPage> {
+class _GetPostsPage extends State<GetPostsPage>
+    with AutomaticKeepAliveClientMixin<GetPostsPage>
+{
   GetPostsBloc _getPostsBloc = GetPostsBloc();
   List<Post> _posts = List.empty();
   BlocEvent<List<Post>> _lastEvent;
+
+  bool get wantKeepAlive => true;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
