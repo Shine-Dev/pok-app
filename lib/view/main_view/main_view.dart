@@ -29,8 +29,11 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  _onPageChanged(int page) {
+  _onPageChanged(int index) {
     primaryFocus.unfocus();
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
