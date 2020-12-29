@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:geolocator/geolocator.dart';
 
 class PostContent {
@@ -23,8 +25,8 @@ class Post {
     return Post(
       id: json["id"],
       postContent: PostContent(
-        title: json["title"],
-        content: json["content"],
+        title: utf8.decode(json["title"].codeUnits),
+        content: utf8.decode(json["content"].codeUnits),
         postLocation: Position(
           latitude: json["latitude"],
           longitude: json["longitude"],

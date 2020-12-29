@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class CommentContent {
   final String postId;
   final String content;
@@ -20,7 +22,7 @@ class Comment {
       id: json["id"],
       commentContent: CommentContent(
         postId: json["postId"],
-        content: json["content"]
+        content: utf8.decode(json["content"].codeUnits)
       ),
       createdAt: DateTime.parse(json["created_at"]),
     );
