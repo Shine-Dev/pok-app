@@ -5,6 +5,7 @@ import 'package:pokapp/model/post.dart';
 import 'package:pokapp/view/main_view/get_posts/post_widget.dart';
 
 class GetPostsPage extends StatefulWidget {
+
   GetPostsPage({Key key}) : super(key: key);
 
   @override
@@ -13,7 +14,8 @@ class GetPostsPage extends StatefulWidget {
 
 class _GetPostsPage extends State<GetPostsPage> {
   GetPostsBloc _getPostsBloc = GetPostsBloc();
-  List<Post> posts = List.empty();
+  List<Post> _posts = List.empty();
+  BlocEvent<List<Post>> _lastEvent;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -29,7 +31,7 @@ class _GetPostsPage extends State<GetPostsPage> {
   Widget _listCenterText(String text) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 1.3,
+        height: MediaQuery.of(context).size.height / 1.2,
         child: Center(
           child: Card(
             shape: RoundedRectangleBorder(
@@ -48,20 +50,18 @@ class _GetPostsPage extends State<GetPostsPage> {
     );
   }
 
-  _postReceived(List<Post> posts) {
+  _setPosts(List<Post> posts) {
     setState(() {
-        this.posts = List.of(posts);
+        this._posts = List.of(posts);
     });
   }
 
   _eventHandle(BlocEvent<List<Post>> event) {
-    switch (event.status) {
-      case Status.LOADING:
-      case Status.ERROR:
-        return _postReceived(List.empty());
-      default:
-        return _postReceived(event.data);
-    }
+    _lastEvent = event;
+    return _setPosts(event.data != null
+      ? event.data
+      : List.empty()
+    );
   }
 
   @override
@@ -69,12 +69,18 @@ class _GetPostsPage extends State<GetPostsPage> {
     return RefreshIndicator(
       key: _refreshIndicatorKey,
       onRefresh: () => _getPostsBloc.getPosts(),
-      child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-        itemCount: posts.length,
+      child: _posts.length > 0 ? ListView.builder(
+        padding: EdgeInsets.fromLTRB(2, 8, 2, 8),
+        itemCount: _posts.length,
         itemBuilder: (context, index) {
-          return PostWidget(post: posts[posts.length - index - 1]);
+          return PostWidget(post: _posts[_posts.length - index - 1]);
         },
+      ) : ListView(
+        children: [ _listCenterText(_lastEvent != null
+            ? _lastEvent.message
+            : "Pull down to search posts in the area"
+        ),
+        ]
       ),
     );
   }

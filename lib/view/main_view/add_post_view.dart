@@ -13,7 +13,6 @@ class AddPostPage extends StatefulWidget {
 }
 
 class _AddPostPage extends State<AddPostPage> {
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = new TextEditingController();
   final TextEditingController _contentController = new TextEditingController();
   bool _buttonDisabled = false;
@@ -52,6 +51,7 @@ class _AddPostPage extends State<AddPostPage> {
       _contentController.text = "";
     });
     _showSnackBar(SnackBar(
+      duration: Duration(seconds: 1),
       backgroundColor: Colors.greenAccent,
       content: Row(children: [
         Icon(Icons.done),
@@ -89,6 +89,7 @@ class _AddPostPage extends State<AddPostPage> {
     });
     _showSnackBar(SnackBar(
       backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 1),
       content: Row(children: [
         Icon(Icons.error),
         Padding(
@@ -101,16 +102,17 @@ class _AddPostPage extends State<AddPostPage> {
     ));
   }
 
-  String _textFieldValidate(value) {
-    if (value.isEmpty) {
-      return '';
-    }
-    return null;
+  bool _textValidate(String value) {
+    return value.trim().isNotEmpty;
+  }
+
+  bool _formValidate() {
+    return _textValidate(_titleController.text)
+        && _textValidate(_contentController.text);
   }
 
   _submit() {
-    // Validate returns true if the form is valid, otherwise false.
-    if (_formKey.currentState.validate()) {
+    if (_formValidate()) {
       setState(() {
         _buttonDisabled = true;
       });
@@ -141,66 +143,61 @@ class _AddPostPage extends State<AddPostPage> {
               width: MediaQuery.of(context).size.width * 0.95,
               child: Card(
                 color: Color.fromRGBO(133, 92, 209, 1),
-                child: Form(
-                  key: _formKey,
-                  child: Column(children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: TextFormField(
-                          controller: _titleController,
-                          style: TextStyle(color: Colors.white70),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 80)),
-                            hintText: "Title",
-                            hintStyle: TextStyle(
-                                color: Colors.white54,
-                                fontStyle: FontStyle.italic),
-                          ),
-                          validator: _textFieldValidate,
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: TextFormField(
+                        controller: _titleController,
+                        style: TextStyle(color: Colors.white70),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 80)),
+                          hintText: "Title",
+                          hintStyle: TextStyle(
+                              color: Colors.white54,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: TextFormField(
-                          controller: _contentController,
-                          style: TextStyle(color: Colors.white70),
-                          maxLines: 7,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 80)),
-                            hintText: "Content",
-                            hintStyle: TextStyle(
-                                color: Colors.white54,
-                                fontStyle: FontStyle.italic),
-                          ),
-                          validator: _textFieldValidate,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: TextFormField(
+                        controller: _contentController,
+                        style: TextStyle(color: Colors.white70),
+                        maxLines: 7,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 80)),
+                          hintText: "Content",
+                          hintStyle: TextStyle(
+                              color: Colors.white54,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.deepPurple),
-                          ),
-                          onPressed: _buttonDisabled ? null : _submit,
-                          child: Text('Create Post'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.deepPurple),
                         ),
+                        onPressed: _buttonDisabled ? null : _submit,
+                        child: Text('Create Post'),
                       ),
-                    )
-                    // Add TextFormFields and ElevatedButton here.
-                  ]),
-                ),
+                    ),
+                  )
+                  // Add TextFormFields and ElevatedButton here.
+                ]),
               ),
             ),
           ),

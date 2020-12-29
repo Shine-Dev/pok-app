@@ -13,12 +13,11 @@ import 'package:pokapp/repository/post_repository.dart';
 class GetCommentsBloc extends BlocBase<List<Comment>> {
   CommentRepository _commentRepository = CommentRepository();
 
-  addPost(String postId) async {
+  getComments(String postId) async {
     safeEventAdd(BlocEvent.loading("Getting comments..."));
     try {
       List<Comment> comments =
           await _commentRepository.getComments(postId);
-
       safeEventAdd(BlocEvent.completed(comments));
     }
     catch(e) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:pokapp/auth/auth_provider.dart';
 
 class AuthPage extends StatefulWidget {
@@ -35,12 +37,7 @@ class _AuthPageState extends State<AuthPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      backgroundColor: Color.fromRGBO(47, 45, 48, 1),
-      appBar: AppBar(
-        // Here we take the value from the AuthPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text("Pok Auth"),
-      ),
+      backgroundColor: Colors.deepPurple,
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -61,11 +58,13 @@ class _AuthPageState extends State<AuthPage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-              onPressed: _signIn,
-              color: Colors.red,
-              textColor: Colors.white,
-              child: Text('Login with google'),
+            Image.asset('assets/images/logo.png', width: 150, height: 70),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: SignInButton(
+                Buttons.Google,
+                onPressed: _signIn,
+              ),
             )
           ],
         ),

@@ -10,7 +10,6 @@ class PostRepository {
     var response = await apiProvider
         .get("posts?latitude=${location.latitude}"
         "&longitude=${location.longitude}");
-
     return (response as List).map((e) => Post.fromJson(e)).toList();
   }
 

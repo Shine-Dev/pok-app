@@ -13,7 +13,7 @@ import 'package:pokapp/repository/post_repository.dart';
 class AddCommentBloc extends BlocBase<Comment> {
   CommentRepository _commentRepository = CommentRepository();
 
-  addPost(CommentContent commentContent) async {
+  addComment(CommentContent commentContent) async {
     safeEventAdd(BlocEvent.loading("Adding new Comment..."));
     try {
       Comment comment = await _commentRepository.addComment(commentContent);
