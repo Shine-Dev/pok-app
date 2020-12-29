@@ -43,6 +43,7 @@ class _PostWidget extends State<PostWidget> {
                 overflow: _expanded
                     ? TextOverflow.visible
                     : TextOverflow.ellipsis,
+                maxLines: _expanded ? post.postContent.content.length : 1,
                 style: TextStyle(color: Colors.white70)),
             onExpansionChanged: _onExpansionChange,
             children: [
